@@ -1,0 +1,63 @@
+--- /usr/share/blender/2.79/scripts/addons/io_scene_obj/export_obj.py	2018-03-19 11:45:33.000000000 +0100
++++ export_obj.py	2019-12-26 18:24:56.377275410 +0100
+@@ -285,6 +285,7 @@
+                EXPORT_GROUP_BY_OB=False,
+                EXPORT_GROUP_BY_MAT=False,
+                EXPORT_KEEP_VERT_ORDER=False,
++               EXPORT_KEEP_VERT_GROUPS=False,
+                EXPORT_POLYGROUPS=False,
+                EXPORT_CURVE_AS_NURBS=True,
+                EXPORT_GLOBAL_MATRIX=None,
+@@ -697,6 +698,20 @@
+                         totverts += len(me_verts)
+                         totuvco += uv_unique_count
+                         totno += no_unique_count
++#changed by alf
++                        if EXPORT_KEEP_VERT_GROUPS:
++                            my_ob = bpy.context.object
++                            group_lookup = {g.index: g.name for g in my_ob.vertex_groups}
++                            verts = {name: [] for name in group_lookup.values()}
++                            for v in my_ob.data.vertices:
++                                for g in v.groups:
++                                    verts[group_lookup[g.group]].append(v.index)
++								
++                            for my_vi_g in verts:
++                                    fw("\nvg %s " % my_vi_g)
++                                    for my_vi in verts[my_vi_g]:
++                                        fw("\ni %d" % (my_vi))
++#End
+ 
+                         # clean up
+                         bpy.data.meshes.remove(me)
+@@ -731,6 +746,7 @@
+            EXPORT_GROUP_BY_OB,
+            EXPORT_GROUP_BY_MAT,
+            EXPORT_KEEP_VERT_ORDER,
++           EXPORT_KEEP_VERT_GROUPS,
+            EXPORT_POLYGROUPS,
+            EXPORT_CURVE_AS_NURBS,
+            EXPORT_SEL_ONLY,  # ok
+@@ -788,6 +804,7 @@
+                        EXPORT_GROUP_BY_OB,
+                        EXPORT_GROUP_BY_MAT,
+                        EXPORT_KEEP_VERT_ORDER,
++                       EXPORT_KEEP_VERT_GROUPS,
+                        EXPORT_POLYGROUPS,
+                        EXPORT_CURVE_AS_NURBS,
+                        EXPORT_GLOBAL_MATRIX,
+@@ -823,6 +840,7 @@
+          group_by_object=False,
+          group_by_material=False,
+          keep_vertex_order=False,
++         keep_vertex_groups=False,
+          use_vertex_groups=False,
+          use_nurbs=True,
+          use_selection=True,
+@@ -845,6 +863,7 @@
+            EXPORT_GROUP_BY_OB=group_by_object,
+            EXPORT_GROUP_BY_MAT=group_by_material,
+            EXPORT_KEEP_VERT_ORDER=keep_vertex_order,
++           EXPORT_KEEP_VERT_GROUPS=keep_vertex_groups,
+            EXPORT_POLYGROUPS=use_vertex_groups,
+            EXPORT_CURVE_AS_NURBS=use_nurbs,
+            EXPORT_SEL_ONLY=use_selection,
