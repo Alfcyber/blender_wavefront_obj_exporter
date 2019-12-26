@@ -1,0 +1,31 @@
+-- /usr/share/blender/2.79/scripts/addons/io_scene_obj/__init__.py	2018-02-23 14:54:03.000000000 +0100
++++ __init__.py	2019-12-26 18:04:16.992331714 +0100
+@@ -19,15 +19,15 @@
+ # <pep8-80 compliant>
+ 
+ bl_info = {
+-    "name": "Wavefront OBJ format",
++    "name": "Wavefront OBJ format (mod)",
+     "author": "Campbell Barton, Bastien Montagne",
+     "version": (2, 3, 6),
+     "blender": (2, 78, 0),
+     "location": "File > Import-Export",
+-    "description": "Import-Export OBJ, Import OBJ mesh, UV's, materials and textures",
++    "description": "Import-Export OBJ (mod), Import OBJ mesh, UV's, materials and textures",
+     "warning": "",
+     "wiki_url": "http://wiki.blender.org/index.php/Extensions:2.6/Py/Scripts/Import-Export/Wavefront_OBJ",
+-    "support": 'OFFICIAL',
++    "support": 'COMMUNITY',
+     "category": "Import-Export"}
+ 
+ if "bpy" in locals():
+@@ -281,7 +281,11 @@
+             description="",
+             default=False,
+             )
+-
++    keep_vertex_groups = BoolProperty(
++            name="Export Vertex by Group",
++            description="Extra single Vertex-Group export",
++            default=False,
++            )
